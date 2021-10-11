@@ -31,17 +31,25 @@ class EggLoader {
   }
 
   loadFile(filepath, ...inject) {
-    if(!fs.existsSync(filepath)) {
-      return null;
+    if (!fs.existsSync(filepath)) {
+      return undefined;
     }
 
     const extname = path.extname(filepath);
 
-    if(!['.js', '.node', '.json', ''].includes(extname)) {
+    if (!['.js', '.node', '.json', ''].includes(extname)) {
       return fs.readFileSync(filepath);
     }
 
-    
+    if (inject.length === 0) inject = [this.app];
+
+    let ret = require(filepath);
+
+    if (is.function(ret) && !is.class(ret)) {
+      ret = ret(...inject);
+    }
+
+    return ret;
   }
 }
 
@@ -51,7 +59,7 @@ class EggCore extends KoaApplication {
     options.type = options.type || 'application';
     super(options);
 
-    const loader = new Loader({
+    const loader = new EggLoader({
       baseDir: options.baseDir,
       app: this
     });
