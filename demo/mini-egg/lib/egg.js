@@ -53,28 +53,65 @@ class EggLoader {
   }
 }
 
-const LoaderMixinRouter = {
-  loadRouter() {
-    this.loadFile(path.join(this.options.baseDir, 'app/router.js'));
-  }
-};
-
-const loaders = [LoaderMixinRouter];
-
-// 把加载单元的方法, 加载在EggLoader原型上
-for (const loader of loaders) {
-  Object.assign(EggLoader.prototype, loader);
-}
-
 class EggCore extends KoaApplication {
   constructor(options) {
     options.baseDir = options.baseDir || process.cwd();
     options.type = options.type || 'application';
     super(options);
 
-    const loader = new EggLoader({
+    const Loader = this[EGG_LOADER];
+
+    this.loader = new Loader({
       baseDir: options.baseDir,
       app: this
     });
   }
+
+  get router() {
+    if (this[ROUTER]) {
+      return this[ROUTER];
+    }
+
+    const router = (this[ROUTER] = new Router({ sensitive: true }, this));
+
+    return router;
+  }
+
+  beforeStart(fn) {
+    process.nextTick(fn);
+  }
 }
+
+// 挂载router方法到 EggCore原型上
+methods
+  .concat(['resources', 'register', 'redirect'])
+  .forEach(function (method) {
+    EggCore.prototype[method] = function (...args) {
+      this.router[method](...args);
+      return this;
+    };
+  });
+
+class AppWorkerLoader extends EggLoader {
+  load() {
+    this.loadRouter();
+  }
+}
+
+class EggApplication extends EggCore {
+  constructor(options) {
+    super(options);
+    this.on('error', (err) => {
+      console.log(err);
+    });
+  }
+
+  get [Symbol.for('egg#eggPath')]() {
+    return __dirname;
+  }
+  get [Symbol.for('egg#loader')]() {
+    return AppWorkerLoader;
+  }
+}
+
+module.exports = EggApplication;
