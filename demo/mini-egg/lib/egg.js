@@ -104,3 +104,10 @@ methods
       return this;
     };
   });
+
+  class AppWorkerLoader extends EggLoader {
+    load() {
+      this.loadRouter();
+    }
+  }
+  
