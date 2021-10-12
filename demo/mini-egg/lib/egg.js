@@ -113,3 +113,5 @@ class EggApplication extends EggCore {
     return AppWorkerLoader;
   }
 }
+
+module.exports = EggApplication;
