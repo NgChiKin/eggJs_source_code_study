@@ -72,9 +72,35 @@ class EggCore extends KoaApplication {
     options.type = options.type || 'application';
     super(options);
 
-    const loader = new EggLoader({
+    const Loader = this[EGG_LOADER];
+
+    this.loader = new Loader({
       baseDir: options.baseDir,
       app: this
     });
   }
+
+  get router() {
+    if (this[ROUTER]) {
+      return this[ROUTER];
+    }
+
+    const router = (this[ROUTER] = new Router({ sensitive: true }, this));
+
+    return router;
+  }
+
+  beforeStart(fn) {
+    process.nextTick(fn);
+  }
 }
+
+// 挂载router方法到 EggCore原型上
+methods
+  .concat(['resources', 'register', 'redirect'])
+  .forEach(function (method) {
+    EggCore.prototype[method] = function (...args) {
+      this.router[method](...args);
+      return this;
+    };
+  });
