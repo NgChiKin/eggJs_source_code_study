@@ -111,7 +111,7 @@ class AppWorkerLoader extends EggLoader {
   }
 }
 
-class Egg extends EggCore {
+class EggApplication extends EggCore {
   constructor(options) {
     super(options);
     this.on('error', (err) => {
@@ -126,3 +126,5 @@ class Egg extends EggCore {
     return AppWorkerLoader;
   }
 }
+
+module.exports = EggApplication;
