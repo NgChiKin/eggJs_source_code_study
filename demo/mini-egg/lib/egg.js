@@ -53,19 +53,6 @@ class EggLoader {
   }
 }
 
-const LoaderMixinRouter = {
-  loadRouter() {
-    this.loadFile(path.join(this.options.baseDir, 'app/router.js'));
-  }
-};
-
-const loaders = [LoaderMixinRouter];
-
-// 把加载单元的方法, 加载在EggLoader原型上
-for (const loader of loaders) {
-  Object.assign(EggLoader.prototype, loader);
-}
-
 class EggCore extends KoaApplication {
   constructor(options) {
     options.baseDir = options.baseDir || process.cwd();
