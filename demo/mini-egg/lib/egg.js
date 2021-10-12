@@ -105,9 +105,8 @@ methods
     };
   });
 
-  class AppWorkerLoader extends EggLoader {
-    load() {
-      this.loadRouter();
-    }
+class AppWorkerLoader extends EggLoader {
+  load() {
+    this.loadRouter();
   }
-  
+}
