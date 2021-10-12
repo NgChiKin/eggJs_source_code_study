@@ -97,3 +97,19 @@ class AppWorkerLoader extends EggLoader {
     this.loadRouter();
   }
 }
+
+class EggApplication extends EggCore {
+  constructor(options) {
+    super(options);
+    this.on('error', (err) => {
+      console.log(err);
+    });
+  }
+
+  get [Symbol.for('egg#eggPath')]() {
+    return __dirname;
+  }
+  get [Symbol.for('egg#loader')]() {
+    return AppWorkerLoader;
+  }
+}
