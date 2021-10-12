@@ -104,6 +104,8 @@ class EggApplication extends EggCore {
     this.on('error', (err) => {
       console.log(err);
     });
+
+    this.loader.load();
   }
 
   get [Symbol.for('egg#eggPath')]() {
