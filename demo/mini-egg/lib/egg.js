@@ -6,6 +6,14 @@ const is = require('is-type-of');
 
 const ROUTER = Symbol('EggCore#router');
 const EGG_LOADER = Symbol.for('egg#loader');
+const BuiltinModule = require('module');
+
+const Module =
+  module.constructor.length > 1
+    ? module.constructor
+    : /* istanbul ignore next */
+      BuiltinModule;
+
 const methods = [
   'head',
   'options',
@@ -37,7 +45,8 @@ class EggLoader {
 
     const extname = path.extname(filepath);
 
-    if (!['.js', '.node', '.json', ''].includes(extname)) {
+    // 如果不是 js 模块, 直接返回 content Buffer
+    if (extname && !Module._extensions[extname]) {
       return fs.readFileSync(filepath);
     }
 
