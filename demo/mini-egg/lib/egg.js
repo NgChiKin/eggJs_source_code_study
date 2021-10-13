@@ -87,6 +87,11 @@ class EggCore extends KoaApplication {
 
     const router = (this[ROUTER] = new Router({ sensitive: true }, this));
 
+    // 注册 router
+    this.beforeStart(() => {
+      this.use(router.middleware());
+    });
+
     return router;
   }
 
