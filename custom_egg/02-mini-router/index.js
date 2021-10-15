@@ -1,5 +1,6 @@
 const EggApplication = require('./lib/egg');
 const http = require('http');
+const chalk = require('chalk');
 
 const app = new EggApplication({
   baseDir: __dirname,
@@ -10,7 +11,7 @@ const server = http.createServer(app.callback());
 
 server.once('error', (error) => {
   console.log(
-    '[app_worker] server got error: %s, code: %s',
+    chalk.redBright('[app_worker] server got error: %s, code: %s'),
     err.message,
     err.code
   );
@@ -18,5 +19,5 @@ server.once('error', (error) => {
 });
 
 server.listen(3333, () => {
-  console.log('server started at 3333');
+  console.log(chalk.cyanBright('server started at 3333'));
 });
