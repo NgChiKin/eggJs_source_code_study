@@ -1,5 +1,8 @@
 const { EggCore, EggLoader } = require('./../egg-core');
 
+const EGG_LOADER = Symbol.for('egg#loader');
+const EGG_PATH = Symbol.for('egg#eggPath');
+
 class AppWorkerLoader extends EggLoader {
   load() {
     this.loadRouter();
@@ -15,10 +18,10 @@ class EggApplication extends EggCore {
     this.loader.load();
   }
 
-  get [Symbol.for('egg#eggPath')]() {
+  get [EGG_PATH]() {
     return __dirname;
   }
-  get [Symbol.for('egg#loader')]() {
+  get [EGG_LOADER]() {
     return AppWorkerLoader;
   }
 }
