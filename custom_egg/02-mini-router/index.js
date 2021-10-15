@@ -2,10 +2,14 @@ const EggApplication = require('./lib/egg');
 const http = require('http');
 const chalk = require('chalk');
 
+const cors = require('@koa/cors');
+
 const app = new EggApplication({
   baseDir: __dirname,
   type: 'application'
 });
+
+app.use(cors());
 
 const server = http.createServer(app.callback());
 
