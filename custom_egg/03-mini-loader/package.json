@@ -8,5 +8,10 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "is-type-of": "^1.2.1",
+    "koa": "^2.13.3",
+    "koa-router": "^10.1.1"
+  }
 }
